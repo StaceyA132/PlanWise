@@ -3,6 +3,7 @@ import { AuthProvider, RequireAuth } from './auth'
 import { Layout } from './components/Layout'
 import { AssistantPage } from './pages/AssistantPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { InsightsPage } from './pages/InsightsPage'
 import { LoginPage } from './pages/LoginPage'
 import { NewPurchasePage } from './pages/NewPurchasePage'
 import { PlanDetailPage } from './pages/PlanDetailPage'
@@ -19,6 +20,7 @@ export default function App() {
             <Route path="purchases/new" element={<NewPurchasePage />} />
             <Route path="plans/:id" element={<PlanDetailPage />} />
             <Route path="assistant" element={<AssistantPage />} />
+            <Route path="insights" element={<InsightsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

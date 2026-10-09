@@ -1,4 +1,4 @@
-import type { AssistantResponse, AuthResponse, Dashboard, Me, Plan, QuoteResponse } from './types'
+import type { AssistantResponse, AuthResponse, Dashboard, Me, MonthlyInsights, Plan, QuoteResponse } from './types'
 
 const TOKEN_KEY = 'planwise.token'
 
@@ -71,4 +71,5 @@ export const api = {
   dashboard: () => request<Dashboard>('GET', '/dashboard'),
   ask: (itemName: string, amount: string, question: string) =>
     request<AssistantResponse>('POST', '/assistant/ask', { itemName, amount, question }),
+  monthlyInsights: (month: string) => request<MonthlyInsights>('GET', `/insights/monthly?month=${encodeURIComponent(month)}`),
 }

@@ -6,6 +6,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.planwise.auth.EmailAlreadyRegisteredException;
 import com.planwise.auth.InvalidCredentialsException;
@@ -58,6 +59,12 @@ public class ApiExceptionHandler {
                 .findFirst()
                 .orElse("Invalid request");
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
+    }
+
+    /** A URL parameter had the wrong format, e.g. ?month=October instead of ?month=2026-10. */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ProblemDetail badParameter(MethodArgumentTypeMismatchException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Invalid value for '" + ex.getName() + "'");
     }
 
     /** The body was not valid JSON, or a field had the wrong type (e.g. "amount": "abc"). */

@@ -51,7 +51,7 @@ public class PlanService {
         User user = users.getReferenceById(userId);
         // The calculator has already validated the amount, so setScale(2) can't lose anything.
         Purchase purchase = purchases.save(
-                new Purchase(user, request.itemName().trim(), request.amount().setScale(2)));
+                new Purchase(user, request.itemName().trim(), request.amount().setScale(2), clock.instant()));
         Plan plan = plans.save(new Plan(purchase, chosen));
         return PlanResponse.from(plan, today);
     }

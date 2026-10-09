@@ -39,6 +39,7 @@ class OpenAiClientTest {
                 .andExpect(jsonPath("$.messages[0].content").value("rules"))
                 .andExpect(jsonPath("$.messages[1].role").value("user"))
                 .andExpect(jsonPath("$.messages[1].content").value("question"))
+                .andExpect(jsonPath("$.response_format").doesNotExist()) // plain text mode
                 // Real replies have many more fields; unknown ones must be ignored.
                 .andRespond(withSuccess("""
                         {"id": "chatcmpl-1", "object": "chat.completion",
@@ -48,6 +49,19 @@ class OpenAiClientTest {
                         """, MediaType.APPLICATION_JSON));
 
         assertThat(client.chat("rules", "question")).isEqualTo("The answer.");
+        server.verify();
+    }
+
+    @Test
+    void chatJsonAsksForJsonObjectOutput() {
+        OpenAiClient client = client("test-key");
+        server.expect(requestTo("https://api.openai.test/v1/chat/completions"))
+                .andExpect(jsonPath("$.response_format.type").value("json_object"))
+                .andRespond(withSuccess("""
+                        {"choices": [{"message": {"role": "assistant", "content": "{\\"ok\\": true}"}}]}
+                        """, MediaType.APPLICATION_JSON));
+
+        assertThat(client.chatJson("rules", "question")).isEqualTo("{\"ok\": true}");
         server.verify();
     }
 

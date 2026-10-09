@@ -15,4 +15,11 @@ public interface AiClient {
      * @throws AiException if the model can't be reached, times out, or returns nothing usable
      */
     String chat(String systemPrompt, String userMessage);
+
+    /**
+     * Like {@link #chat}, but asks the model to reply with a single JSON object.
+     * The caller must still parse and validate the JSON: "JSON mode" guarantees valid syntax,
+     * not that the content follows our rules.
+     */
+    String chatJson(String systemPrompt, String userMessage);
 }

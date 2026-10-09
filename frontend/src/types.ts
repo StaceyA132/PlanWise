@@ -95,3 +95,19 @@ export interface AssistantResponse {
   explanation: string | null
   aiAvailable: boolean
 }
+
+export interface CategoryTotal {
+  category: string
+  total: number
+  purchaseCount: number
+  percentOfTotal: number
+}
+
+export interface MonthlyInsights {
+  month: string // "2026-10"
+  totalSpent: number
+  purchaseCount: number
+  categories: CategoryTotal[]
+  summary: string | null
+  aiAvailable: boolean
+}

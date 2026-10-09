@@ -1,4 +1,4 @@
-package com.planwise.assistant;
+package com.planwise.ai;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,4 +1,4 @@
-package com.planwise.assistant;
+package com.planwise.ai;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

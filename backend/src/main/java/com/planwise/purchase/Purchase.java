@@ -47,9 +47,15 @@ public class Purchase {
     }
 
     public Purchase(User user, String itemName, BigDecimal amount) {
+        this(user, itemName, amount, null);
+    }
+
+    /** @param createdAt when the purchase happened; if null, it's set to now when saved */
+    public Purchase(User user, String itemName, BigDecimal amount, Instant createdAt) {
         this.user = user;
         this.itemName = itemName;
         this.amount = amount;
+        this.createdAt = createdAt;
     }
 
     @PrePersist

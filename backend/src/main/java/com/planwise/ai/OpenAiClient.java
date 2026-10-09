@@ -2,6 +2,8 @@ package com.planwise.ai;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -13,7 +15,12 @@ public class OpenAiClient implements AiClient {
     record Message(String role, String content) {
     }
 
-    record ChatRequest(String model, List<Message> messages) {
+    record ResponseFormat(String type) {
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL) // leave response_format out entirely for plain text
+    record ChatRequest(String model, List<Message> messages,
+                       @JsonProperty("response_format") ResponseFormat responseFormat) {
     }
 
     record Choice(Message message) {
@@ -32,12 +39,21 @@ public class OpenAiClient implements AiClient {
 
     @Override
     public String chat(String systemPrompt, String userMessage) {
+        return send(systemPrompt, userMessage, null);
+    }
+
+    @Override
+    public String chatJson(String systemPrompt, String userMessage) {
+        return send(systemPrompt, userMessage, new ResponseFormat("json_object"));
+    }
+
+    private String send(String systemPrompt, String userMessage, ResponseFormat responseFormat) {
         if (!properties.hasApiKey()) {
             throw new AiException("OPENAI_API_KEY is not set");
         }
         ChatRequest request = new ChatRequest(properties.model(), List.of(
                 new Message("system", systemPrompt),
-                new Message("user", userMessage)));
+                new Message("user", userMessage)), responseFormat);
 
         ChatResponse response;
         try {

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planwise.ai.AiClient;
+import com.planwise.ai.AiNumberGuard;
 import com.planwise.assistant.BudgetFacts.OptionBudget;
 import com.planwise.plan.Frequency;
 import com.planwise.plan.Payment;
@@ -120,6 +121,9 @@ public class AssistantService {
             reply = aiClient.chat(SYSTEM_PROMPT, buildUserMessage(request, options, budget));
         } catch (RuntimeException e) { // AiException, timeouts, anything unexpected
             log.warn("Plan assistant AI call failed; returning plans without an explanation: {}", e.getMessage());
+            return null;
+        }
+        if (reply == null || reply.isBlank()) {
             return null;
         }
         List<String> unknown = numberGuard(request, options, budget).unknownNumbers(reply);
