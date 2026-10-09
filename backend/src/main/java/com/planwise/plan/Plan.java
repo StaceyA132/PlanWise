@@ -1,6 +1,7 @@
 package com.planwise.plan;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -112,5 +113,36 @@ public class Plan {
 
     public List<Payment> getPayments() {
         return Collections.unmodifiableList(payments);
+    }
+
+    /** Marks one of this plan's payments as paid. The plan is PAID_OFF once every payment is paid. */
+    public void markPaymentPaid(Long paymentId, Instant when) {
+        Payment payment = payments.stream()
+                .filter(p -> p.getId().equals(paymentId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Payment " + paymentId + " is not in plan " + id));
+        if (payment.isPaid()) {
+            throw new PaymentAlreadyPaidException();
+        }
+        payment.markPaid(when);
+        if (payments.stream().allMatch(Payment::isPaid)) {
+            status = PlanStatus.PAID_OFF;
+        }
+    }
+
+    public BigDecimal amountPaid() {
+        return sumWhere(true);
+    }
+
+    /** What is still owed: the sum of unpaid installments (interest included, since it's in the schedule). */
+    public BigDecimal amountRemaining() {
+        return sumWhere(false);
+    }
+
+    private BigDecimal sumWhere(boolean paid) {
+        return payments.stream()
+                .filter(p -> p.isPaid() == paid)
+                .map(Payment::getAmount)
+                .reduce(BigDecimal.ZERO.setScale(2), BigDecimal::add);
     }
 }

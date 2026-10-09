@@ -81,7 +81,28 @@ public class Payment {
         return paidAt;
     }
 
+    /** The stored status: UPCOMING or PAID. */
     public PaymentStatus getStatus() {
         return status;
+    }
+
+    public boolean isPaid() {
+        return status == PaymentStatus.PAID;
+    }
+
+    /**
+     * The status to show the user on a given day. LATE isn't stored; it's worked out from the
+     * due date, so it is always accurate without a background job updating rows.
+     */
+    public PaymentStatus statusOn(LocalDate today) {
+        if (!isPaid() && dueDate.isBefore(today)) {
+            return PaymentStatus.LATE;
+        }
+        return status;
+    }
+
+    void markPaid(Instant when) {
+        this.status = PaymentStatus.PAID;
+        this.paidAt = when;
     }
 }

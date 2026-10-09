@@ -62,7 +62,7 @@ class PersistenceTest {
             assertThat(p.getStatus()).isEqualTo(PaymentStatus.UPCOMING);
             assertThat(p.getPaidAt()).isNull();
         });
-        assertThat(plans.findByPurchaseUserId(user.getId())).hasSize(1);
+        assertThat(plans.findByPurchaseUserIdOrderByIdDesc(user.getId())).hasSize(1);
     }
 
     @Test

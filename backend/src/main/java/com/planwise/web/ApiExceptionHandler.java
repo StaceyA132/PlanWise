@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.planwise.auth.EmailAlreadyRegisteredException;
 import com.planwise.auth.InvalidCredentialsException;
 import com.planwise.plan.InvalidAmountException;
+import com.planwise.plan.InvalidPlanChoiceException;
+import com.planwise.plan.PaymentAlreadyPaidException;
 
 /**
  * Turns exceptions into error responses in the standard ProblemDetail format:
@@ -21,6 +23,21 @@ public class ApiExceptionHandler {
     @ExceptionHandler(InvalidAmountException.class)
     public ProblemDetail invalidAmount(InvalidAmountException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidPlanChoiceException.class)
+    public ProblemDetail invalidPlanChoice(InvalidPlanChoiceException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ProblemDetail notFound(ResourceNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(PaymentAlreadyPaidException.class)
+    public ProblemDetail alreadyPaid(PaymentAlreadyPaidException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(EmailAlreadyRegisteredException.class)
