@@ -22,13 +22,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.planwise.config.PlanConfig;
+import com.planwise.config.SecurityConfig;
 
 /**
  * Starts only the web layer (controller, JSON conversion, validation, exception handler)
  * and sends fake HTTP requests through it with MockMvc. No real server or port.
  */
 @WebMvcTest(QuoteController.class)
-@Import({PlanConfig.class, QuoteControllerTest.FixedClockConfig.class})
+@Import({PlanConfig.class, SecurityConfig.class, QuoteControllerTest.FixedClockConfig.class})
 class QuoteControllerTest {
 
     /** Pins "today" to 2026-01-31 so due dates in the response are predictable. */
@@ -50,6 +51,7 @@ class QuoteControllerTest {
                 .content(json));
     }
 
+    // No Authorization header anywhere in this class: quotes are public.
     @Test
     void returnsThreePlanOptions() throws Exception {
         postQuote("{\"amount\": 1000}")

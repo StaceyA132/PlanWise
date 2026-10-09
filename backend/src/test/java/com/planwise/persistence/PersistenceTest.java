@@ -11,12 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.planwise.TestcontainersConfiguration;
 import com.planwise.plan.PaymentStatus;
 import com.planwise.plan.Plan;
 import com.planwise.plan.PlanCalculator;
@@ -32,12 +30,8 @@ import com.planwise.user.UserRepository;
  */
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // use the container, not an in-memory DB
-@Testcontainers
+@Import(TestcontainersConfiguration.class)
 class PersistenceTest {
-
-    @Container
-    @ServiceConnection // points spring.datasource.* at this container automatically
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17");
 
     @Autowired
     private TestEntityManager em;

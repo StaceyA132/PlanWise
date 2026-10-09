@@ -7,10 +7,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.planwise.auth.EmailAlreadyRegisteredException;
+import com.planwise.auth.InvalidCredentialsException;
 import com.planwise.plan.InvalidAmountException;
 
 /**
- * Turns exceptions into 400 Bad Request responses in the standard ProblemDetail format:
+ * Turns exceptions into error responses in the standard ProblemDetail format:
  * {"status": 400, "title": "Bad Request", "detail": "..."}
  */
 @RestControllerAdvice
@@ -19,6 +21,16 @@ public class ApiExceptionHandler {
     @ExceptionHandler(InvalidAmountException.class)
     public ProblemDetail invalidAmount(InvalidAmountException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailAlreadyRegisteredException.class)
+    public ProblemDetail emailTaken(EmailAlreadyRegisteredException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ProblemDetail invalidCredentials(InvalidCredentialsException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
     /** A @Valid check failed, e.g. a required field was missing. */
