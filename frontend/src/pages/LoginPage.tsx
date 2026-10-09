@@ -63,7 +63,7 @@ export function LoginPage() {
           </label>
           {isRegister && (
             <label>
-              Monthly income <span className="muted">(optional, helps the assistant)</span>
+              <span>Monthly income <span className="muted">(optional, helps the assistant)</span></span>
               <input type="number" min="0" step="0.01" inputMode="decimal" value={income}
                      onChange={(e) => setIncome(e.target.value)} placeholder="4000.00" />
             </label>

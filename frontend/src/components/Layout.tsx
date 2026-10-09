@@ -12,6 +12,7 @@ export function Layout() {
           <nav className="nav">
             <NavLink to="/" end>Dashboard</NavLink>
             <NavLink to="/purchases/new">New purchase</NavLink>
+            <NavLink to="/assistant">Assistant</NavLink>
             <button type="button" className="link-button" onClick={logout}>Log out</button>
           </nav>
         </div>

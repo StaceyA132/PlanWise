@@ -76,3 +76,22 @@ export interface Dashboard {
   activePlans: number
   paidOffPlans: number
 }
+
+export interface OptionBudget {
+  numPayments: number
+  dueWithinMonth: number
+  totalDueWithinMonth: number
+  percentOfIncome: number | null
+}
+
+export interface AssistantResponse {
+  options: PlanOption[]
+  budget: {
+    monthlyIncome: number | null
+    activePlanCount: number
+    existingDueWithinMonth: number
+    options: OptionBudget[]
+  }
+  explanation: string | null
+  aiAvailable: boolean
+}

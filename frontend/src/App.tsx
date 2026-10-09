@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { AuthProvider, RequireAuth } from './auth'
 import { Layout } from './components/Layout'
+import { AssistantPage } from './pages/AssistantPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { LoginPage } from './pages/LoginPage'
 import { NewPurchasePage } from './pages/NewPurchasePage'
@@ -17,6 +18,7 @@ export default function App() {
             <Route index element={<DashboardPage />} />
             <Route path="purchases/new" element={<NewPurchasePage />} />
             <Route path="plans/:id" element={<PlanDetailPage />} />
+            <Route path="assistant" element={<AssistantPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
