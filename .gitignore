@@ -1,0 +1,14 @@
+# Build output
+target/
+node_modules/
+dist/
+
+# Secrets: never commit API keys
+.env
+*.env
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
