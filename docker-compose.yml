@@ -1,0 +1,21 @@
+# Local PostgreSQL for development. Start it with: docker compose up -d
+services:
+  postgres:
+    image: postgres:17
+    container_name: planwise-postgres
+    environment:
+      POSTGRES_DB: planwise
+      POSTGRES_USER: planwise
+      POSTGRES_PASSWORD: planwise   # local development only
+    ports:
+      - "5433:5432"   # host 5433 -> container 5432 (5432 is often taken by a local Postgres)
+    volumes:
+      - planwise-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U planwise -d planwise"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  planwise-data:
